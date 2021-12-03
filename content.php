@@ -96,5 +96,10 @@ else {
 	elseif ($_GET['module'] == 'transaksi') {
 		include "modules/transaksi/form.php";
 	}
+
+	// jika halaman konten yang dipilih form transksi, panggil file form transaksi
+	elseif ($_GET['module'] == 'konfirmasi') {
+		include "modules/konfirmasi/form.php";
+	}
 }
 ?>

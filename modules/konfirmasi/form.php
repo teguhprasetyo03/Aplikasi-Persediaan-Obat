@@ -1,11 +1,12 @@
 <script type="text/javascript">
-  function tampil_obat(input) {
+  function tampil_transaksi(input) {
     var num = input.value;
 
-    $.post("modules/transaksi/obat.php", {
-      dataidobat: num,
+    $.post("modules/konfirmasi/pembelian.php", {
+      datakodetransaksi: num,
     }, function(response) {
-      $('#stok').html(response)
+      $('#tglpembelian').html(response)
+      $('#namaobat').html(response)
 
       document.getElementById('jumlah_keluar').focus();
     });
@@ -54,11 +55,11 @@ if ($_GET['form'] == 'add') { ?>
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      <i class="fa fa-edit icon-title"></i> Input Data Pembelian Obat
+      <i class="fa fa-edit icon-title"></i> Konfirmasi Pesanan
     </h1>
     <ol class="breadcrumb">
       <li><a href="?module=beranda"><i class="fa fa-home"></i> Beranda </a></li>
-      <li><a href="?module=obat_keluar"> Pembelian Obat </a></li>
+      <li><a href="?module=obat_keluar"> Konfirmasi Pesanan </a></li>
       <li class="active"> Tambah </li>
     </ol>
   </section>
@@ -72,81 +73,93 @@ if ($_GET['form'] == 'add') { ?>
           <form role="form" class="form-horizontal" action="modules/obat-keluar/proses.php?act=insert" method="POST" name="formObatKeluar">
             <div class="box-body">
               <?php
-              // fungsi untuk membuat kode transaksi
-              $query_id = mysqli_query($mysqli, "SELECT RIGHT(kode_transaksi,7) as kode FROM is_obat_keluar
-                                                ORDER BY kode_transaksi DESC LIMIT 1")
-                or die('Ada kesalahan pada query tampil kode_transaksi : ' . mysqli_error($mysqli));
+              // // fungsi untuk membuat kode transaksi
+              // $query_id = mysqli_query($mysqli, "SELECT RIGHT(kode_transaksi,7) as kode FROM is_obat_keluar
+              //                                   ORDER BY kode_transaksi DESC LIMIT 1")
+              //   or die('Ada kesalahan pada query tampil kode_transaksi : ' . mysqli_error($mysqli));
 
-              $count = mysqli_num_rows($query_id);
+              // $count = mysqli_num_rows($query_id);
 
-              if ($count <> 0) {
-                // mengambil data kode transaksi
-                $data_id = mysqli_fetch_assoc($query_id);
-                $kode    = $data_id['kode'] + 1;
-              } else {
-                $kode = 1;
-              }
+              // if ($count <> 0) {
+              //   // mengambil data kode transaksi
+              //   $data_id = mysqli_fetch_assoc($query_id);
+              //   $kode    = $data_id['kode'] + 1;
+              // } else {
+              //   $kode = 1;
+              // }
 
-              // buat kode_transaksi
-              $tahun          = date("Y");
-              $buat_id        = str_pad($kode, 7, "0", STR_PAD_LEFT);
-              $kode_transaksi = "TK-$tahun-$buat_id";
+              // // buat kode_transaksi
+              // $tahun          = date("Y");
+              // $buat_id        = str_pad($kode, 7, "0", STR_PAD_LEFT);
+              // $kode_transaksi = "TK-$tahun-$buat_id";
               ?>
 
               <div class="form-group">
                 <label class="col-sm-2 control-label">Kode Transaksi</label>
                 <div class="col-sm-5">
-                  <input type="text" class="form-control" name="kode_transaksi" value="<?php echo $kode_transaksi; ?>" readonly required>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Tanggal</label>
-                <div class="col-sm-5">
-                  <input type="text" class="form-control date-picker" data-date-format="dd-mm-yyyy" name="tanggal_keluar" autocomplete="off" value="<?php echo date("d-m-Y"); ?>" required>
-                </div>
-              </div>
-
-              <hr>
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label">Obat</label>
-                <div class="col-sm-5">
-                  <select class="chosen-select" name="kode_obat" data-placeholder="-- Pilih Obat --" onchange="tampil_obat(this)" autocomplete="off" required>
+                  <select class="chosen-select" name="kode_transaksi" data-placeholder="-- Pilih Kode Transaksi --" onchange="tampil_transaksi(this)" autocomplete="off" required>
                     <option value=""></option>
                     <?php
-                    $query_obat = mysqli_query($mysqli, "SELECT kode_obat, nama_obat FROM is_obat ORDER BY nama_obat ASC")
-                      or die('Ada kesalahan pada query tampil obat: ' . mysqli_error($mysqli));
+                    $query_obat = mysqli_query($mysqli, "SELECT kode_transaksi, nama_obat, tanggal_pembelian, harga,jumlah_beli,total_harga FROM tb_pembelian ORDER BY kode_transaksi ASC")
+                      or die('Ada kesalahan pada query tampil transaksi: ' . mysqli_error($mysqli));
                     while ($data_obat = mysqli_fetch_assoc($query_obat)) {
-                      echo "<option value=\"$data_obat[kode_obat]\"> $data_obat[kode_obat] | $data_obat[nama_obat] </option>";
+                      echo "<option value=\"$data_obat[kode_transaksi]\"> $data_obat[kode_transaksi] | $data_obat[kode_transaksi] </option>";
                     }
                     ?>
                   </select>
                 </div>
               </div>
 
-              <span id='stok'>
+              <!-- <div class="form-group">
+                <label class="col-sm-2 control-label">Kode Transaksi</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" name="kode_transaksi" value="<?php echo $kode_transaksi; ?>" readonly required>
+                </div>
+              </div> -->
+
+              <!-- <div class="form-group">
+                <label class="col-sm-2 control-label">Pilih Tanggal Transaksi</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control date-picker" data-date-format="dd-mm-yyyy" name="tanggal_keluar" autocomplete="off" value="<?php echo date("d-m-Y"); ?>" required>
+                </div>
+              </div> -->
+
+              <hr>
+
+
+
+              <span id='tglpembelian'>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">Harga</label>
+                  <label class="col-sm-2 control-label">Tanggal Pembelian</label>
                   <div class="col-sm-5">
-                    <input type="number" class="form-control" id="harga_jual" name="hrg_jual" readonly="">
+                    <input type="text" class="form-control" id="tglpembelian" name="tglpembelian" readonly="">
                   </div>
                 </div>
               </span>
 
-              <div class="form-group">
+
+              <!-- <span id='namaobat'>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Nama Obat</label>
+                  <div class="col-sm-5">
+                    <input type="number" class="form-control" id="namaobat" name="namaobat" readonly="">
+                  </div>
+                </div>
+              </span> -->
+
+              <!-- <div class="form-group">
                 <label class="col-sm-2 control-label">Jumlah Beli</label>
                 <div class="col-sm-5">
                   <input type="number" class="form-control" id="jumlah_beli" name="jml_beli" required="">
                 </div>
-              </div>
+              </div> -->
 
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label class="col-sm-2 control-label">Total Harga</label>
                 <div class="col-sm-5">
                   <input type="text" class="form-control" onkeyup="sum();" id="nominal" name="total" readonly="">
                 </div>
-              </div>
+              </div> -->
 
             </div><!-- /.box body -->
 

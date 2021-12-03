@@ -350,7 +350,10 @@ if ($_SESSION['hak_akses'] == 'Pengguna') { ?>
       <a href="?module=beranda"><i class="fa fa-home"></i> Beranda </a>
     </li>
     <li>
-      <a href="?module=transaksi&form=add"><i class="fa fa-folder"></i> Pembelian Obat</a>
+      <a href="?module=transaksi&form=add"><i class="fa fa-shopping-cart"></i> Pembelian Obat</a>
+    </li>
+    <li>
+      <a href="?module=konfirmasi&form=add"><i class="fa fa-folder"></i> Konfirmasi Pesanan</a>
     </li>
     <li>
       <a href="?module=form_obat&form=add"><i class="fa fa-folder"></i> Tracking Pesanan</a>
