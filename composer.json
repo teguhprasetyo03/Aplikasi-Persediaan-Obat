@@ -1,0 +1,12 @@
+{
+    "name": "fajarsetiawan/obat",
+    "autoload": {
+        "psr-4": {
+            "Fajarsetiawan\\Obat\\": "src/"
+        }
+    },
+    "require": {},
+    "scripts" : {
+        "server" : "php -S localhost:8080"
+    }
+}
